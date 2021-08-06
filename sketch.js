@@ -4,6 +4,10 @@
 // Todo: Implement scoring
 // Todo: Implement multiple hexagons
 // Todo: Adjust speeds 
+// Todo: Refactor
+// Todo: Cleanup
+// Todo: Implement random mode with randomly shaped obstacles, for example 3-8 sides
+// Todo: Implement some kind of indicator (like pulsating colors) in obstacles that increases when getting closer to player
 
 
 class Settings {
@@ -19,7 +23,7 @@ let gui = null;
 let settings = new Settings();
 
 let sclx, scly;
-let hexagonAngle = 0;
+let angle = 0;
 let hexagonRadius = 0;
 let ballAngle = 0;
 let score = 0;
@@ -28,6 +32,10 @@ let isGameOver = false;
 let ballX = 0;
 let ballY = 0;
 let color = null;
+let obstacles = [];
+
+// Constants
+let obstacleSpacing = 500;
 
 // Called by P5.js
 function setup() {
@@ -36,7 +44,7 @@ function setup() {
 
   textFont('monospace');
   initializeGuiControls();
-  resetRadius();
+  initializeGameObjects();
 }
 
 function windowResized() {
@@ -77,6 +85,20 @@ function initializeGuiControls() {
   gui.close();
 }
 
+function initializeGameObjects() {
+  score = 0;
+  isGameOver = false;
+  
+  obstacles = []; 
+
+  var baseRadius = windowHeight > windowWidth ? windowHeight : windowWidth;
+  baseRadius /= 1.1;
+
+  for (let i = 0; i < 3; i++) {
+    obstacles.push(new Obstacle(baseRadius + i*500, baseRadius));
+  }
+}
+
 // Main update loop
 function draw() {
   updateControls();
@@ -90,12 +112,12 @@ function draw() {
     handleBallInput();
     //checkCollision();
     checkScore();
-    updateHexagons();
+    updateObstacles();
   }
 
-  drawHexagon();
+  drawObstacles();
   if (!isGameOver) {
-    checkCollision();
+    //checkCollision();
   }
   drawBall();
   drawScore();
@@ -122,9 +144,7 @@ function handleRestart() {
   }
 
   // Todo: Reset properly
-  score = 0;
-  isGameOver = false;
-  hexagonRadius = windowHeight;
+  initializeGameObjects();
 }
 
 function checkCollision() {
@@ -140,49 +160,29 @@ function checkCollision() {
 }
 
 function checkScore() {
-  if (hexagonRadius - ballDistance < 10) {
-    score++;
+  // Todo: Implement
+  // if (hexagonRadius - ballDistance < 10) {
+  //   score++;
+  // }
+}
+
+function updateObstacles() {
+  for (let obstacle of obstacles) {
+    obstacle.update(deltaTime);
   }
 }
 
-function updateHexagons() {
-  hexagonAngle += deltaTime / 1000;
-  hexagonAngle = normalizeAngle(hexagonAngle);
-
-  hexagonRadius -= deltaTime / 5;
-  if (hexagonRadius < 5) {
-    resetRadius();
+function drawObstacles() {
+  for (let obstacle of obstacles) {
+    obstacle.draw();
   }
 }
 
-function normalizeAngle(angle) {
-  let newAngle = angle - TWO_PI * floor((angle + PI) / TWO_PI);
-  return newAngle;
-}
-
-function resetRadius() {
-  hexagonRadius = windowHeight > windowWidth ? windowHeight : windowWidth;
-  hexagonRadius /= 1.1;
-}
-
-function drawHexagon() {
-  strokeWeight(hexagonRadius / 8);
-  strokeCap(SQUARE);
-  strokeJoin(MITER);
-  stroke(255, 255, 255);
-  noFill();
-
-  push();
-  translate(windowWidth / 2, windowHeight / 2);
-  polygon(0, 0, hexagonRadius, 6, hexagonAngle);
-  pop();
-}
-
+// Todo: Create separate class/file
 function drawBall() {
   strokeWeight(2);
   stroke('black');
   fill('white');
-
 
   push();
 
@@ -191,18 +191,6 @@ function drawBall() {
   circle(0, 0, 20);
 
   pop();
-}
-
-// Draw a basic polygon, handles triangles, squares, pentagons, etc
-function polygon(x, y, radius, sides = 3, angle = 0) {
-  beginShape();
-  for (let i = 0; i < sides; i++) {
-    const a = angle + TWO_PI * (i / sides);
-    let sx = x + cos(a) * radius;
-    let sy = y + sin(a) * radius;
-    vertex(sx, sy);
-  }
-  endShape();
 }
 
 function updateControls() {
@@ -224,7 +212,7 @@ function drawDiagnostics() {
 
   text("FPS:   " + frameRate().toFixed(), left, top);
   text("Score: " + score.toFixed(), left, top + 1 * offset);
-  text("Hexa:  " + hexagonAngle.toFixed(2), left, top + 2 * offset);
+  text("Hexa:  " + angle.toFixed(2), left, top + 2 * offset);
   text("GOver: " + isGameOver, left, top + 3 * offset);
   text("BallA: " + ballAngle.toFixed(2), left, top + 4 * offset);
   text("BallX: " + ballX, left, top + 5 * offset);
@@ -244,7 +232,7 @@ function drawScore() {
   stroke(0, 0, 0);
   strokeWeight(2.5);
   textAlign(CENTER, TOP);
-  text(score, windowWidth / 2, 0);
+  text("Score: " + score, windowWidth / 2, 50);
 
   pop();
 }
@@ -253,12 +241,12 @@ function drawGameOver() {
   push();
 
   var size = 75;
-  textSize(75);
+  textSize(size);
   fill(255, 255, 255);
   stroke(0, 0, 0);
   strokeWeight(2.5);
   textAlign(CENTER, BOTTOM);
-  text("GAME OVER", windowWidth / 2, windowHeight - 75);
+  text("GAME OVER", windowWidth / 2, windowHeight - size);
   text("SPACE TO RESTART", windowWidth / 2, windowHeight);
 
   pop();
