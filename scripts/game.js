@@ -24,9 +24,6 @@ let rightIsPressed = false;
 let obstacles = [];
 let player = new Player();
 
-// Constants
-
-
 // Called by P5.js
 function setup() {
   let canvas = createCanvas(windowWidth, windowHeight);
@@ -161,7 +158,7 @@ function checkClearedObstacles() {
 
     if (player.radius - obstacle.radius > 15) {
       score++;
-      obstacle.hasBeenCleared = true;
+      obstacle.setCleared();
     }
   }
 }

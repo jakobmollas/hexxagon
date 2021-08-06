@@ -48,7 +48,7 @@ function drawGameOver() {
   strokeWeight(2.5);
   textAlign(CENTER, BOTTOM);
   text("GAME OVER", centerX(), windowHeight - 3*size);
-  text("PRESS SPACE/MOUSE", centerX(), windowHeight - 2*size);
+  text("PRESS SPACE/TOUCH", centerX(), windowHeight - 2*size);
   text("TO RESTART", centerX(), windowHeight - size);
 
   pop();

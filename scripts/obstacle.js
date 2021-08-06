@@ -23,6 +23,10 @@ class Obstacle {
         this.hasBeenCleared = false;
     }
 
+    setCleared() {
+        this.hasBeenCleared = true;
+    }
+
     update(respawnRadius) {
         this.angle += deltaTime / this.rotationSpeed;
         this.angle = normalizeAngle(this.angle);
