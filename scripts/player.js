@@ -2,7 +2,15 @@
 
 class Player {
     constructor() {
+        this.direction = {
+            NONE: "none",
+            LEFT: "left",
+            RIGHT: "right"
+        }
+
         this.rotationAngle = 0;
+        this.rotation = this.direction.NONE;
+        this.rotateRight = false;
         this.x;
         this.y;
 
@@ -11,22 +19,12 @@ class Player {
         this.size = 12;
         this.radius = 100;
         this.driftSpeed = 5000;
-        
-        this.direction = {
-            LEFT: "left",
-            RIGHT: "right"
-        }
-    }
-
-    rotateLeft() {
-        this.rotate(this.direction.LEFT, this.rotationSpeed);
-    }
-
-    rotateRight() {
-        this.rotate(this.direction.RIGHT, this.rotationSpeed);
     }
 
     rotate(rotationDirection, speed) {
+        if (rotationDirection == this.direction.NONE) 
+            return;
+
         var delta = deltaTime;
         delta = delta * (rotationDirection == this.direction.LEFT ? -1 : 1);
         this.rotationAngle += delta / speed;
@@ -34,7 +32,9 @@ class Player {
     }
 
     update() {
-        // Drift
+        this.rotate(this.rotation, this.rotationSpeed);
+
+        // Add drift
         this.rotate(this.direction.RIGHT, this.driftSpeed);
 
         var rotationVector = p5.Vector.fromAngle(player.rotationAngle, player.radius);
@@ -52,7 +52,4 @@ class Player {
         circle(this.x, this.y, this.size);
         pop();
     }
-
-    
-    
 }

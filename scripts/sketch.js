@@ -16,6 +16,8 @@ class Settings {
 let settings = new Settings();
 let score = 0;
 let isGameOver = false;
+let leftIsPressed = false;
+let rightIsPressed = false;
 let obstacles = [];
 let player = new Player();
 
@@ -61,6 +63,21 @@ function keyTyped() {
   }
 }
 
+function mousePressed(event) {
+  console.log(event.targetTouches[0]);
+  leftIsPressed = event.targetTouches[0].clientX < centerX();
+  rightIsPressed = event.targetTouches[0].clientX >= centerX();
+
+  return false;
+}
+
+function mouseReleased(event) {
+  leftIsPressed = false;
+  rightIsPressed = false;
+
+  return false;
+}
+
 function draw() {
   background(255, 0, 0);
 
@@ -68,7 +85,7 @@ function draw() {
     drawDiagnostics();
 
   if (!isGameOver && settings.animate) {
-    handleBallInput();
+    handleKeyboardInput();
     updateObstacles();
     updatePlayer();
     checkClearedObstacles();
@@ -110,13 +127,14 @@ function handleRestart() {
   initializeGameObjects();
 }
 
-function handleBallInput() {
-  if (keyIsDown(LEFT_ARROW)) {
-    player.rotateLeft();
+function handleKeyboardInput() {
+  if (mouseIsPressed) {
+    // Let touch/mouse code handle this
+    return;
   }
-  if (keyIsDown(RIGHT_ARROW)) {
-    player.rotateRight();
-  }
+  
+  leftIsPressed = keyIsDown(LEFT_ARROW);
+  rightIsPressed = keyIsDown(RIGHT_ARROW);
 }
 
 function checkCollisions() {
@@ -155,6 +173,16 @@ function updateObstacles() {
 }
 
 function updatePlayer() {
+  if (leftIsPressed) {
+    player.rotation = player.direction.LEFT;
+  }
+  else if (rightIsPressed) {
+    player.rotation = player.direction.RIGHT;
+  }
+  else {
+    player.rotation = player.direction.NONE;
+  }
+
   player.update();
 }
 
