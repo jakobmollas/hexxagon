@@ -5,6 +5,7 @@ class Obstacle {
         this.radius = initialRadius;
         this.baseRadius = baseRadius;
         
+        // Constants
         this.rotationSpeed = 1000;  // lower = faster
         this.shrinkSpeed = 5;   // higher = faster
         this.minimumSize = 10;  // pixels

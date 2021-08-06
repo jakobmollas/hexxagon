@@ -8,6 +8,7 @@
 // Todo: Cleanup
 // Todo: Implement random mode with randomly shaped obstacles, for example 3-8 sides
 // Todo: Implement some kind of indicator (like pulsating colors) in obstacles that increases when getting closer to player
+// Todo: Remove settings?
 
 
 class Settings {
@@ -23,16 +24,10 @@ let gui = null;
 let settings = new Settings();
 
 let sclx, scly;
-let angle = 0;
-let hexagonRadius = 0;
-let ballAngle = 0;
 let score = 0;
-let ballDistance = 100;
 let isGameOver = false;
-let ballX = 0;
-let ballY = 0;
-let color = null;
 let obstacles = [];
+let player = new Player();
 
 // Constants
 let obstacleSpacing = 500;
@@ -113,13 +108,14 @@ function draw() {
     //checkCollision();
     checkScore();
     updateObstacles();
+    updatePlayer();
   }
 
   drawObstacles();
   if (!isGameOver) {
     //checkCollision();
   }
-  drawBall();
+  drawPlayer();
   drawScore();
   
   if (isGameOver) {
@@ -129,13 +125,11 @@ function draw() {
 
 function handleBallInput() {
   if (keyIsDown(LEFT_ARROW)) {
-    ballAngle -= deltaTime / 300;
+    player.rotateLeft();
   }
   if (keyIsDown(RIGHT_ARROW)) {
-    ballAngle += deltaTime / 300;
+    player.rotateRight();
   }
-
-  ballAngle = normalizeAngle(ballAngle);
 }
 
 function handleRestart() {
@@ -147,16 +141,11 @@ function handleRestart() {
   initializeGameObjects();
 }
 
-function checkCollision() {
+function checkCollisions() {
   // Todo: Improve collision detection, use geometry instead, this is VERY brittle...
-  var x = windowWidth / 2;
-  var y = windowHeight / 2;
-  var ballVector = p5.Vector.fromAngle(ballAngle, ballDistance);
-  ballX = x + ballVector.x;
-  ballY = y + ballVector.y;
-
-  color = get(ballX, ballY);
-  isGameOver = isGameOver || color[1] == 255;
+  
+  var colorAtBallPosition = get(player.x, player.y);
+  isGameOver = isGameOver || colorAtBallPosition[1] == 255;
 }
 
 function checkScore() {
@@ -172,25 +161,18 @@ function updateObstacles() {
   }
 }
 
+function updatePlayer() {
+  player.update(windowWidth/2, windowHeight/2);
+}
+
 function drawObstacles() {
   for (let obstacle of obstacles) {
     obstacle.draw();
   }
 }
 
-// Todo: Create separate class/file
-function drawBall() {
-  strokeWeight(2);
-  stroke('black');
-  fill('white');
-
-  push();
-
-  translate(windowWidth / 2, windowHeight / 2);
-  translate(p5.Vector.fromAngle(ballAngle, 100));
-  circle(0, 0, 20);
-
-  pop();
+function drawPlayer() {
+  player.draw();
 }
 
 function updateControls() {
@@ -212,14 +194,12 @@ function drawDiagnostics() {
 
   text("FPS:   " + frameRate().toFixed(), left, top);
   text("Score: " + score.toFixed(), left, top + 1 * offset);
-  text("Hexa:  " + angle.toFixed(2), left, top + 2 * offset);
   text("GOver: " + isGameOver, left, top + 3 * offset);
-  text("BallA: " + ballAngle.toFixed(2), left, top + 4 * offset);
-  text("BallX: " + ballX, left, top + 5 * offset);
-  text("BallY: " + ballY, left, top + 6 * offset);
+  text("BallA: " + player.rotationAngle.toFixed(2), left, top + 4 * offset);
+  text("BallX: " + player.x, left, top + 5 * offset);
+  text("BallY: " + player.y, left, top + 6 * offset);
   text("CX:    " + windowWidth / 2, left, top + 7 * offset);
   text("CY:    " + windowHeight / 2, left, top + 8 * offset);
-  text("color: " + color, left, top + 9 * offset);
 
   pop();
 }
