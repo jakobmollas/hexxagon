@@ -6,9 +6,10 @@ class Obstacle {
         this.hasBeenCleared = false;
         
         // Constants
-        this.rotationSpeed = 3000;  // lower = faster
+        this.rotationSpeed = 2000;  // lower = faster
         this.shrinkSpeed = 3.5;   // lower = faster
-        this.minimumSize = 10;  // pixels
+        this.minimumSize = 10;
+        this.thickness = 15;
 
         this.initialize(initialRadius);
     }
@@ -33,7 +34,7 @@ class Obstacle {
 
     draw() {
         push();
-        strokeWeight(20);
+        strokeWeight(this.thickness);
         strokeCap(SQUARE);
         strokeJoin(MITER);
         stroke(255, 255, 255);

@@ -1,7 +1,6 @@
 'use strict'
 
 // TODO: Calculate scaling factor based on screen size
-// Todo: Adjust speeds 
 // Todo: Refactor
 // Todo: Cleanup
 
@@ -14,9 +13,7 @@ class Settings {
   constructor() {
     this.animate = true;
     this.showDiagnostics = true;
-    this.size = 15;
-    this.speed = 0.01;
-    this.checkCollisions = true;
+    this.checkCollisions = false;
   }
 }
 
@@ -68,22 +65,6 @@ function keyTyped() {
   }
 }
 
-// Private code
-function initializeGameObjects() {
-  score = 0;
-  isGameOver = false;
-
-  obstacles = [];
-
-  var baseRadius = windowHeight > windowWidth ? windowHeight : windowWidth;
-  baseRadius /= 1.1;
-
-  for (let i = 0; i < obstacleCount; i++) {
-    obstacles.push(new Obstacle(baseRadius + i * obstacleSpacing));
-  }
-}
-
-// Main update loop
 function draw() {
   background(255, 0, 0);
 
@@ -103,18 +84,25 @@ function draw() {
   }
   drawPlayer();
   drawScore();
+  drawCenterIndicator();
 
   if (isGameOver) {
     drawGameOver();
   }
 }
 
-function handleBallInput() {
-  if (keyIsDown(LEFT_ARROW)) {
-    player.rotateLeft();
-  }
-  if (keyIsDown(RIGHT_ARROW)) {
-    player.rotateRight();
+// Private code
+function initializeGameObjects() {
+  score = 0;
+  isGameOver = false;
+
+  obstacles = [];
+
+  var baseRadius = windowHeight > windowWidth ? windowHeight : windowWidth;
+  baseRadius /= 1.1;
+
+  for (let i = 0; i < obstacleCount; i++) {
+    obstacles.push(new Obstacle(baseRadius + i * obstacleSpacing));
   }
 }
 
@@ -124,6 +112,15 @@ function handleRestart() {
   }
 
   initializeGameObjects();
+}
+
+function handleBallInput() {
+  if (keyIsDown(LEFT_ARROW)) {
+    player.rotateLeft();
+  }
+  if (keyIsDown(RIGHT_ARROW)) {
+    player.rotateRight();
+  }
 }
 
 function checkCollisions() {
@@ -175,11 +172,6 @@ function drawPlayer() {
   player.draw();
 }
 
-function updateControls() {
-  for (let i in gui.__controllers)
-    gui.__controllers[i].updateDisplay();
-}
-
 function drawDiagnostics() {
   push();
 
@@ -228,6 +220,16 @@ function drawGameOver() {
   textAlign(CENTER, BOTTOM);
   text("GAME OVER", windowWidth / 2, windowHeight - size);
   text("SPACE TO RESTART", windowWidth / 2, windowHeight);
+
+  pop();
+}
+
+function drawCenterIndicator() {
+  push();
+
+  fill(0, 0, 0, 100);
+  noStroke();
+  circle(windowWidth / 2, windowHeight / 2, 40);
 
   pop();
 }

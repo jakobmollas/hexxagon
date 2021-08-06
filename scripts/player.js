@@ -7,8 +7,8 @@ class Player {
         this.y;
 
         // Constants
-        this.rotationSpeed = 150;  // lower = faster
-        this.size = 20;
+        this.rotationSpeed = 180;  // lower = faster
+        this.size = 12;
         this.radius = 100;
     }
 
@@ -30,7 +30,7 @@ class Player {
 
     draw() {
         push();
-        strokeWeight(2);
+        strokeWeight(1);
         stroke('black');
         fill('white');
 
