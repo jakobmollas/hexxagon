@@ -18,3 +18,11 @@ function createPolygon(x, y, radius, sides = 3, angle = 0) {
 
     endShape();
 }
+
+function centerX() {
+    return windowWidth / 2;
+}
+
+function centerY() {
+    return windowHeight / 2;
+}

@@ -14,7 +14,7 @@ class Obstacle {
         this.initialize(initialRadius);
     }
 
-    update(deltaTime, respawnRadius) {
+    update(respawnRadius) {
         this.angle += deltaTime / this.rotationSpeed;
         this.angle = normalizeAngle(this.angle);
 
@@ -40,7 +40,7 @@ class Obstacle {
         stroke(255, 255, 255);
         noFill();
 
-        translate(windowWidth / 2, windowHeight / 2);
+        translate(centerX(), centerY());
         createPolygon(0, 0, this.radius, this.sides, this.angle);
         pop();
     }

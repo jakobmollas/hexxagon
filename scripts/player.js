@@ -33,13 +33,13 @@ class Player {
         this.rotationAngle = normalizeAngle(this.rotationAngle);
     }
 
-    update(centerX, centerY) {
+    update() {
         // Drift
         this.rotate(this.direction.RIGHT, this.driftSpeed);
 
         var rotationVector = p5.Vector.fromAngle(player.rotationAngle, player.radius);
-        this.x = centerX + rotationVector.x;
-        this.y = centerY + rotationVector.y;
+        this.x = centerX() + rotationVector.x;
+        this.y = centerY() + rotationVector.y;
     }
 
     

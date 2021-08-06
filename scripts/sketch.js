@@ -1,9 +1,5 @@
 'use strict'
 
-// TODO: Calculate scaling factor based on screen size
-// Todo: Refactor
-// Todo: Cleanup
-
 // Maybe:
 // Todo: Implement random mode with randomly shaped obstacles, for example 3-8 sides
 // Todo: Implement some kind of indicator (like pulsating colors) in obstacles that increases when getting closer to player
@@ -18,7 +14,6 @@ class Settings {
 }
 
 let settings = new Settings();
-let sclx, scly;
 let score = 0;
 let isGameOver = false;
 let obstacles = [];
@@ -34,6 +29,7 @@ function setup() {
   canvas.style('display', 'block');
 
   textFont('monospace');
+  noCursor();
   initializeGameObjects();
 }
 
@@ -154,12 +150,12 @@ function updateObstacles() {
   var respawnRadius = largestRadius + obstacleSpacing;
 
   for (let obstacle of obstacles) {
-    obstacle.update(deltaTime, respawnRadius);
+    obstacle.update(respawnRadius);
   }
 }
 
 function updatePlayer() {
-  player.update(windowWidth / 2, windowHeight / 2);
+  player.update();
 }
 
 function drawObstacles() {
@@ -190,8 +186,8 @@ function drawDiagnostics() {
   text("BallA: " + player.rotationAngle.toFixed(2), left, top + 4 * offset);
   text("BallX: " + player.x, left, top + 5 * offset);
   text("BallY: " + player.y, left, top + 6 * offset);
-  text("CX:    " + windowWidth / 2, left, top + 7 * offset);
-  text("CY:    " + windowHeight / 2, left, top + 8 * offset);
+  text("CX:    " + centerX(), left, top + 7 * offset);
+  text("CY:    " + centerY(), left, top + 8 * offset);
 
   pop();
 }
@@ -199,12 +195,13 @@ function drawDiagnostics() {
 function drawScore() {
   push();
 
-  textSize(75);
+  var size = 50;
+  textSize(size);
   fill(255, 255, 255);
   stroke(0, 0, 0);
   strokeWeight(2.5);
   textAlign(CENTER, TOP);
-  text("Score: " + score, windowWidth / 2, 50);
+  text("Score: " + score, centerX(), 50);
 
   pop();
 }
@@ -212,14 +209,14 @@ function drawScore() {
 function drawGameOver() {
   push();
 
-  var size = 75;
+  var size = 30;
   textSize(size);
   fill(255, 255, 255);
   stroke(0, 0, 0);
   strokeWeight(2.5);
   textAlign(CENTER, BOTTOM);
-  text("GAME OVER", windowWidth / 2, windowHeight - size);
-  text("SPACE TO RESTART", windowWidth / 2, windowHeight);
+  text("GAME OVER", centerX(), windowHeight - 2*size);
+  text("PRESS SPACE TO RESTART", centerX(), windowHeight - size);
 
   pop();
 }
@@ -229,7 +226,7 @@ function drawCenterIndicator() {
 
   fill(0, 0, 0, 100);
   noStroke();
-  circle(windowWidth / 2, windowHeight / 2, 40);
+  circle(centerX(), centerY(), 40);
 
   pop();
 }
