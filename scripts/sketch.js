@@ -12,8 +12,8 @@
 class Settings {
   constructor() {
     this.animate = true;
-    this.showDiagnostics = true;
-    this.checkCollisions = false;
+    this.showDiagnostics = false;
+    this.checkCollisions = true;
   }
 }
 
@@ -44,7 +44,7 @@ function windowResized() {
 function keyTyped() {
   switch (key) {
     case "a":
-      settings.animate = !settings.animate;
+      settings.animate = settings.showDiagnostics ? !settings.animate : settings.animate;
       break;
 
     case "d":
@@ -52,7 +52,7 @@ function keyTyped() {
       break;
 
     case "c":
-      settings.checkCollisions = !settings.checkCollisions;
+      settings.checkCollisions = settings.showDiagnostics ? !settings.checkCollisions : settings.checkCollisions;
       break;
 
     case " ":

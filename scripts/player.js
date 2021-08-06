@@ -10,24 +10,39 @@ class Player {
         this.rotationSpeed = 180;  // lower = faster
         this.size = 12;
         this.radius = 100;
+        this.driftSpeed = 5000;
+        
+        this.direction = {
+            LEFT: "left",
+            RIGHT: "right"
+        }
     }
 
     rotateLeft() {
-        this.rotationAngle -= deltaTime / this.rotationSpeed;
-        this.rotationAngle = normalizeAngle(this.rotationAngle);
+        this.rotate(this.direction.LEFT, this.rotationSpeed);
     }
 
     rotateRight() {
-        this.rotationAngle += deltaTime / this.rotationSpeed;
+        this.rotate(this.direction.RIGHT, this.rotationSpeed);
+    }
+
+    rotate(rotationDirection, speed) {
+        var delta = deltaTime;
+        delta = delta * (rotationDirection == this.direction.LEFT ? -1 : 1);
+        this.rotationAngle += delta / speed;
         this.rotationAngle = normalizeAngle(this.rotationAngle);
     }
 
     update(centerX, centerY) {
+        // Drift
+        this.rotate(this.direction.RIGHT, this.driftSpeed);
+
         var rotationVector = p5.Vector.fromAngle(player.rotationAngle, player.radius);
         this.x = centerX + rotationVector.x;
         this.y = centerY + rotationVector.y;
     }
 
+    
     draw() {
         push();
         strokeWeight(1);
@@ -37,4 +52,7 @@ class Player {
         circle(this.x, this.y, this.size);
         pop();
     }
+
+    
+    
 }
