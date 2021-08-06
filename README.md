@@ -8,3 +8,4 @@ Controls:
 * LEFT/RIGHT arrows or touch left/right - rotate ball
 * SPACE/touch - restart
 * i - toggle random shape mode
+* d - toggle diagnostics
