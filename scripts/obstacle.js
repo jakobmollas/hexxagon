@@ -16,6 +16,13 @@ class Obstacle {
         this.initialize(initialRadius);
     }
 
+    initialize(radius) {
+        this.radius = radius;
+        this.angle = random(-PI, PI);
+        this.sides = this.inzaneMode ? floor(random(3, 9)) : this.standardSizes;
+        this.hasBeenCleared = false;
+    }
+
     update(respawnRadius) {
         this.angle += deltaTime / this.rotationSpeed;
         this.angle = normalizeAngle(this.angle);
@@ -24,13 +31,6 @@ class Obstacle {
         if (this.radius < this.minimumSize) {
             this.initialize(respawnRadius);
         }
-    }
-
-    initialize(radius) {
-        this.radius = radius;
-        this.angle = random(-PI, PI);
-        this.sides = this.inzaneMode ? floor(random(3, 9)) : this.standardSizes;
-        this.hasBeenCleared = false;
     }
 
     draw() {

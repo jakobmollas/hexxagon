@@ -21,6 +21,11 @@ class Player {
         this.driftSpeed = 5000;
     }
 
+    // Just to tidy up the "api" a bit
+    setRotation(direction) {
+        this.rotation = direction;
+    }
+
     rotate(rotationDirection, speed) {
         if (rotationDirection == this.direction.NONE) 
             return;
@@ -34,7 +39,7 @@ class Player {
     update() {
         this.rotate(this.rotation, this.rotationSpeed);
 
-        // Add drift
+        // Add base drift
         this.rotate(this.direction.RIGHT, this.driftSpeed);
 
         var rotationVector = p5.Vector.fromAngle(player.rotationAngle, player.radius);
