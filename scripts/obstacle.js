@@ -1,15 +1,17 @@
 'use strict'
 
 class Obstacle {
-    constructor(initialRadius) {
+    constructor(initialRadius, inzaneMode) {
         this.radius = initialRadius;
         this.hasBeenCleared = false;
+        this.inzaneMode = inzaneMode;
         
         // Constants
         this.rotationSpeed = 2000;  // lower = faster
         this.shrinkSpeed = 3.5;   // lower = faster
         this.minimumSize = 10;
         this.thickness = 15;
+        this.standardSizes = 6;
 
         this.initialize(initialRadius);
     }
@@ -27,8 +29,7 @@ class Obstacle {
     initialize(radius) {
         this.radius = radius;
         this.angle = random(-PI, PI);
-        //this.sides = floor(random(3, 9));
-        this.sides = 6;
+        this.sides = this.inzaneMode ? floor(random(3, 9)) : this.standardSizes;
         this.hasBeenCleared = false;
     }
 

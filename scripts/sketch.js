@@ -10,6 +10,7 @@ class Settings {
     this.animate = true;
     this.showDiagnostics = false;
     this.checkCollisions = true;
+    this.inzaneMode = false;
   }
 }
 
@@ -53,6 +54,10 @@ function keyTyped() {
       settings.checkCollisions = settings.showDiagnostics ? !settings.checkCollisions : settings.checkCollisions;
       break;
 
+    case "i":
+      settings.inzaneMode = !settings.inzaneMode;
+      break;
+
     case " ":
       handleRestart();
       break;
@@ -64,7 +69,6 @@ function keyTyped() {
 }
 
 function mousePressed(event) {
-  console.log(event.targetTouches[0]);
   leftIsPressed = event.targetTouches[0].clientX < centerX();
   rightIsPressed = event.targetTouches[0].clientX >= centerX();
   handleRestart();
@@ -116,7 +120,7 @@ function initializeGameObjects() {
   baseRadius /= 1.1;
 
   for (let i = 0; i < obstacleCount; i++) {
-    obstacles.push(new Obstacle(baseRadius + i * obstacleSpacing));
+    obstacles.push(new Obstacle(baseRadius + i * obstacleSpacing, settings.inzaneMode));
   }
 }
 

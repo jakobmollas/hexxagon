@@ -4,4 +4,7 @@ Simple clone of an IOS game called Hexahexagongongon, implemented using [P5](htt
 
 Live example at: https://jakobmollas.github.io/hexxagon/
 
-Controls: LEFT/RIGHT arrows or touch left/right to rotate ball, SPACE/touch to restart.
+Controls: 
+* LEFT/RIGHT arrows or touch left/right - rotate ball
+* SPACE/touch - restart
+* i - toggle random shape mode
