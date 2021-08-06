@@ -67,6 +67,7 @@ function mousePressed(event) {
   console.log(event.targetTouches[0]);
   leftIsPressed = event.targetTouches[0].clientX < centerX();
   rightIsPressed = event.targetTouches[0].clientX >= centerX();
+  handleRestart();
 
   return false;
 }
@@ -132,7 +133,7 @@ function handleKeyboardInput() {
     // Let touch/mouse code handle this
     return;
   }
-  
+
   leftIsPressed = keyIsDown(LEFT_ARROW);
   rightIsPressed = keyIsDown(RIGHT_ARROW);
 }
@@ -223,13 +224,13 @@ function drawDiagnostics() {
 function drawScore() {
   push();
 
-  var size = 50;
+  var size = 40;
   textSize(size);
   fill(255, 255, 255);
   stroke(0, 0, 0);
   strokeWeight(2.5);
   textAlign(CENTER, TOP);
-  text("Score: " + score, centerX(), 50);
+  text("Score: " + score, centerX(), size);
 
   pop();
 }
@@ -237,14 +238,15 @@ function drawScore() {
 function drawGameOver() {
   push();
 
-  var size = 30;
+  var size = 20;
   textSize(size);
   fill(255, 255, 255);
   stroke(0, 0, 0);
   strokeWeight(2.5);
   textAlign(CENTER, BOTTOM);
-  text("GAME OVER", centerX(), windowHeight - 2*size);
-  text("PRESS SPACE TO RESTART", centerX(), windowHeight - size);
+  text("GAME OVER", centerX(), windowHeight - 3*size);
+  text("PRESS SPACE/MOUSE", centerX(), windowHeight - 2*size);
+  text("TO RESTART", centerX(), windowHeight - size);
 
   pop();
 }
