@@ -12,7 +12,9 @@ class Obstacle {
         this.shrinkSpeed = 3.5;   // lower = faster
         this.minimumSize = 10;
         this.thickness = 13;
-        this.standardSizes = 6;
+        this.standardSideCount = 6;
+        this.minRandomSides = 3;
+        this.maxRandomSides = 8;
 
         this.initialize(initialRadius);
     }
@@ -21,8 +23,10 @@ class Obstacle {
         this.originalRadius = radius;
         this.radius = radius;
         this.angle = random(-PI, PI);
-        this.sides = this.inzaneMode ? floor(random(3, 9)) : this.standardSizes;
         this.hasBeenCleared = false;
+        this.sides = this.inzaneMode 
+            ? floor(random(this.minRandomSides, this.maxRandomSides + 1)) 
+            : this.standardSideCount;
     }
 
     setCleared() {
