@@ -15,9 +15,9 @@ class Player {
         this.y;
 
         // Constants
-        this.rotationSpeed = 180;  // lower = faster
+        this.rotationSpeed = 160;  // lower = faster
         this.size = 12;
-        this.radius = 100;
+        this.radius = 75;
         this.driftSpeed = 5000;
     }
 

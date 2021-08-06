@@ -59,7 +59,7 @@ function drawCenterIndicator() {
 
   fill(0, 0, 0, 100);
   noStroke();
-  circle(centerX(), centerY(), 40);
+  circle(centerX(), centerY(), 50);
 
   pop();
 }

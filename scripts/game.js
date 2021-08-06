@@ -11,6 +11,8 @@ class Settings {
     this.showDiagnostics = false;
     this.checkCollisions = true;
     this.inzaneMode = false;
+    this.obstacleSpacing = 235;
+    this.obstacleCount = 3;
   }
 }
 
@@ -23,8 +25,7 @@ let obstacles = [];
 let player = new Player();
 
 // Constants
-let obstacleSpacing = 300;
-let obstacleCount = 3;
+
 
 // Called by P5.js
 function setup() {
@@ -124,8 +125,8 @@ function initializeGameObjects() {
   var baseRadius = windowHeight > windowWidth ? windowHeight : windowWidth;
   baseRadius /= 1.1;
 
-  for (let i = 0; i < obstacleCount; i++) {
-    obstacles.push(new Obstacle(baseRadius + i * obstacleSpacing, settings.inzaneMode));
+  for (let i = 0; i < settings.obstacleCount; i++) {
+    obstacles.push(new Obstacle(baseRadius + i * settings.obstacleSpacing, settings.inzaneMode));
   }
 }
 
@@ -173,7 +174,7 @@ function updateObstacles() {
       : largestRadius;
   }
 
-  var respawnRadius = largestRadius + obstacleSpacing;
+  var respawnRadius = largestRadius + settings.obstacleSpacing;
 
   for (let obstacle of obstacles) {
     obstacle.update(respawnRadius);

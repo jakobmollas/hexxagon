@@ -10,7 +10,7 @@ class Obstacle {
         this.rotationSpeed = 2000;  // lower = faster
         this.shrinkSpeed = 3.5;   // lower = faster
         this.minimumSize = 10;
-        this.thickness = 15;
+        this.thickness = 13;
         this.standardSizes = 6;
 
         this.initialize(initialRadius);
