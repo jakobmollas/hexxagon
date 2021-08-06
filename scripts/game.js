@@ -1,10 +1,5 @@
 'use strict'
 
-// Maybe:
-// Todo: Implement random mode with randomly shaped obstacles, for example 3-8 sides
-// Todo: Implement some kind of indicator (like pulsating colors) in obstacles that increases when getting closer to player
-
-
 class Settings {
   constructor() {
     this.animate = true;

@@ -2,6 +2,7 @@
 
 class Obstacle {
     constructor(initialRadius, inzaneMode) {
+        this.originalRadius = initialRadius;
         this.radius = initialRadius;
         this.hasBeenCleared = false;
         this.inzaneMode = inzaneMode;
@@ -17,6 +18,7 @@ class Obstacle {
     }
 
     initialize(radius) {
+        this.originalRadius = radius;
         this.radius = radius;
         this.angle = random(-PI, PI);
         this.sides = this.inzaneMode ? floor(random(3, 9)) : this.standardSizes;
@@ -42,11 +44,10 @@ class Obstacle {
         strokeWeight(this.thickness);
         strokeCap(SQUARE);
         strokeJoin(MITER);
-        stroke(255, 255, 255);
+        stroke('white');
         noFill();
 
-        translate(centerX(), centerY());
-        createPolygon(0, 0, this.radius, this.sides, this.angle);
+        createPolygon(centerX(), centerY(), this.radius, this.sides, this.angle);
         pop();
     }
 }
