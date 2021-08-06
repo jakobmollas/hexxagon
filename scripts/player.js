@@ -5,11 +5,11 @@ class Player {
         this.rotationAngle = 0;
         this.x;
         this.y;
-  
+
         // Constants
-        this.rotationSpeed = 300;  // lower = faster
+        this.rotationSpeed = 150;  // lower = faster
         this.size = 20;
-        this.distance = 100;
+        this.radius = 100;
     }
 
     rotateLeft() {
@@ -23,7 +23,7 @@ class Player {
     }
 
     update(centerX, centerY) {
-        var rotationVector = p5.Vector.fromAngle(player.rotationAngle, player.distance);
+        var rotationVector = p5.Vector.fromAngle(player.rotationAngle, player.radius);
         this.x = centerX + rotationVector.x;
         this.y = centerY + rotationVector.y;
     }

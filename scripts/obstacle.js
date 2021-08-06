@@ -1,25 +1,25 @@
 'use strict'
 
 class Obstacle {
-    constructor(initialRadius, baseRadius) {
+    constructor(initialRadius) {
         this.radius = initialRadius;
-        this.baseRadius = baseRadius;
+        this.hasBeenCleared = false;
         
         // Constants
-        this.rotationSpeed = 1000;  // lower = faster
-        this.shrinkSpeed = 5;   // higher = faster
+        this.rotationSpeed = 3000;  // lower = faster
+        this.shrinkSpeed = 3.5;   // lower = faster
         this.minimumSize = 10;  // pixels
 
         this.initialize(initialRadius);
     }
 
-    update(deltaTime) {
+    update(deltaTime, respawnRadius) {
         this.angle += deltaTime / this.rotationSpeed;
         this.angle = normalizeAngle(this.angle);
 
         this.radius -= deltaTime / this.shrinkSpeed;
         if (this.radius < this.minimumSize) {
-            this.initialize(this.baseRadius);
+            this.initialize(respawnRadius);
         }
     }
 
@@ -28,11 +28,11 @@ class Obstacle {
         this.angle = random(-PI, PI);
         //this.sides = floor(random(3, 9));
         this.sides = 6;
+        this.hasBeenCleared = false;
     }
 
     draw() {
         push();
-        //strokeWeight(this.radius / 8);
         strokeWeight(20);
         strokeCap(SQUARE);
         strokeJoin(MITER);

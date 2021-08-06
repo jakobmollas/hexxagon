@@ -1,14 +1,13 @@
 'use strict'
 
 // TODO: Calculate scaling factor based on screen size
-// Todo: Implement scoring
-// Todo: Implement multiple hexagons
 // Todo: Adjust speeds 
 // Todo: Refactor
 // Todo: Cleanup
+
+// Maybe:
 // Todo: Implement random mode with randomly shaped obstacles, for example 3-8 sides
 // Todo: Implement some kind of indicator (like pulsating colors) in obstacles that increases when getting closer to player
-// Todo: Remove settings?
 
 
 class Settings {
@@ -17,12 +16,11 @@ class Settings {
     this.showDiagnostics = true;
     this.size = 15;
     this.speed = 0.01;
+    this.checkCollisions = true;
   }
 }
 
-let gui = null;
 let settings = new Settings();
-
 let sclx, scly;
 let score = 0;
 let isGameOver = false;
@@ -30,7 +28,8 @@ let obstacles = [];
 let player = new Player();
 
 // Constants
-let obstacleSpacing = 500;
+let obstacleSpacing = 300;
+let obstacleCount = 3;
 
 // Called by P5.js
 function setup() {
@@ -38,7 +37,6 @@ function setup() {
   canvas.style('display', 'block');
 
   textFont('monospace');
-  initializeGuiControls();
   initializeGameObjects();
 }
 
@@ -56,8 +54,8 @@ function keyTyped() {
       settings.showDiagnostics = !settings.showDiagnostics;
       break;
 
-    case "h":
-      gui.closed ? gui.open() : gui.close();
+    case "c":
+      settings.checkCollisions = !settings.checkCollisions;
       break;
 
     case " ":
@@ -70,34 +68,23 @@ function keyTyped() {
   }
 }
 
-function initializeGuiControls() {
-  gui = new dat.GUI()
-  gui.add(settings, 'animate');
-
-  gui.add(settings, 'size', 1, 20);
-  gui.add(settings, 'speed', 0, 1.0);
-
-  gui.close();
-}
-
+// Private code
 function initializeGameObjects() {
   score = 0;
   isGameOver = false;
-  
-  obstacles = []; 
+
+  obstacles = [];
 
   var baseRadius = windowHeight > windowWidth ? windowHeight : windowWidth;
   baseRadius /= 1.1;
 
-  for (let i = 0; i < 3; i++) {
-    obstacles.push(new Obstacle(baseRadius + i*500, baseRadius));
+  for (let i = 0; i < obstacleCount; i++) {
+    obstacles.push(new Obstacle(baseRadius + i * obstacleSpacing));
   }
 }
 
 // Main update loop
 function draw() {
-  updateControls();
-
   background(255, 0, 0);
 
   if (settings.showDiagnostics)
@@ -105,19 +92,18 @@ function draw() {
 
   if (!isGameOver && settings.animate) {
     handleBallInput();
-    //checkCollision();
-    checkScore();
     updateObstacles();
     updatePlayer();
+    checkClearedObstacles();
   }
 
   drawObstacles();
-  if (!isGameOver) {
-    //checkCollision();
+  if (!isGameOver && settings.checkCollisions) {
+    checkCollisions();
   }
   drawPlayer();
   drawScore();
-  
+
   if (isGameOver) {
     drawGameOver();
   }
@@ -137,32 +123,46 @@ function handleRestart() {
     return;
   }
 
-  // Todo: Reset properly
   initializeGameObjects();
 }
 
 function checkCollisions() {
   // Todo: Improve collision detection, use geometry instead, this is VERY brittle...
-  
+
   var colorAtBallPosition = get(player.x, player.y);
   isGameOver = isGameOver || colorAtBallPosition[1] == 255;
 }
 
-function checkScore() {
-  // Todo: Implement
-  // if (hexagonRadius - ballDistance < 10) {
-  //   score++;
-  // }
+function checkClearedObstacles() {
+  for (let obstacle of obstacles) {
+    if (obstacle.hasBeenCleared) {
+      continue;
+    }
+
+    if (player.radius - obstacle.radius > 15) {
+      score++;
+      obstacle.hasBeenCleared = true;
+    }
+  }
 }
 
 function updateObstacles() {
+  var largestRadius = 0;
   for (let obstacle of obstacles) {
-    obstacle.update(deltaTime);
+    largestRadius = largestRadius < obstacle.radius 
+      ? obstacle.radius 
+      : largestRadius;
+  }
+
+  var respawnRadius = largestRadius + obstacleSpacing;
+
+  for (let obstacle of obstacles) {
+    obstacle.update(deltaTime, respawnRadius);
   }
 }
 
 function updatePlayer() {
-  player.update(windowWidth/2, windowHeight/2);
+  player.update(windowWidth / 2, windowHeight / 2);
 }
 
 function drawObstacles() {
