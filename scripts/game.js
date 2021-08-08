@@ -96,7 +96,7 @@ function draw() {
   // Render game objects
   drawObstacles();
   if (!isGameOver && settings.checkCollisions) {
-    checkCollisions();  // Yes, this should be handled in game logic but currently relies on drawing order
+    checkGameOver();  // Yes, this should be handled in game logic but currently relies on drawing order
   }
   drawPlayer();
 
@@ -125,6 +125,8 @@ function initializeGameObjects() {
   for (let i = 0; i < settings.obstacleCount; i++) {
     obstacles.push(new Obstacle(baseRadius + i * settings.obstacleSpacing, settings.inzaneMode));
   }
+
+  player.initialize();
 }
 
 function handleRestart() {
@@ -143,15 +145,11 @@ function handleKeyboardInput() {
   rightIsPressed = keyIsDown(RIGHT_ARROW);
 }
 
-function checkCollisions() {
+function checkGameOver() {
   // Todo: Improve collision detection, use geometry instead, this is VERY brittle...
 
   var colorAtBallPosition = get(player.x, player.y);
   isGameOver = isGameOver || colorAtBallPosition[1] == 255;
-
-  if (isGameOver) {
-    player.initialize();
-  }
 }
 
 function checkClearedObstacles() {

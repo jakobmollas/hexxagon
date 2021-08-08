@@ -22,11 +22,21 @@ class Obstacle {
     initialize(radius) {
         this.originalRadius = radius;
         this.radius = radius;
-        this.angle = random(-PI, PI);
         this.hasBeenCleared = false;
         this.sides = this.inzaneMode
             ? floor(random(this.minRandomSides, this.maxRandomSides + 1))
             : this.standardSideCount;
+
+        // It is very hard for players when opening is to the right/left (horizontal), 
+        // ensure opening is more vertically aligned
+        // Also account for rotation.
+        // Clock-wise:
+        // PI (left) -> 0 (right)
+        // 0 (right) -> -PI (left)
+        this.angle = !random([0, 1]) 
+            ? random(PI, PI * 1/6)
+            : random(0, -PI * 5/6);
+
     }
 
     setCleared() {
