@@ -8,6 +8,7 @@ class Player {
             RIGHT: "right"
         }
 
+        this.rotationSpeed = 6;
         this.rotationAngle = 0;
         this.rotation = this.direction.NONE;
         this.rotateRight = false;
@@ -15,15 +16,12 @@ class Player {
         this.y;
 
         // Constants
-        this.rotationSpeed = 6.5;
+        this.initialRotationSpeed = 6;
+        this.driftSpeed = 0.2;
         this.size = 12;
         this.radius = 75;
-        this.driftSpeed = 0.2;
-    }
-
-    // Just to tidy up the "api" a bit
-    setRotation(direction) {
-        this.rotation = direction;
+        
+        this.initialize();
     }
 
     rotate(rotationDirection, speed) {
@@ -36,7 +34,19 @@ class Player {
         this.rotationAngle = normalizeAngle(this.rotationAngle);
     }
 
-    update() {
+    // Just to tidy up the "api" a bit
+    setRotation(direction) {
+        this.rotation = direction;
+    }
+
+    initialize() {
+        this.rotationSpeed = this.initialRotationSpeed;
+    }
+
+    update(speedIncrement) {
+        let adjustedSpeedIncrement = deltaSpeed(speedIncrement/60);
+        this.rotationSpeed += adjustedSpeedIncrement;
+
         this.rotate(this.rotation, this.rotationSpeed);
 
         // Add base drift

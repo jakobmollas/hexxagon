@@ -15,7 +15,6 @@ class Obstacle {
         this.standardSideCount = 6;
         this.minRandomSides = 3;
         this.maxRandomSides = 8;
-        this.shrinkSpeedIncrement = 4;
 
         this.initialize(initialRadius);
     }
@@ -43,9 +42,7 @@ class Obstacle {
             this.initialize(respawnRadius);
         }
 
-        this.shrinkSpeed += this.shrinkSpeed > 1
-            ? deltaSpeed(this.shrinkSpeedIncrement)
-            : 0;
+        this.shrinkSpeed += deltaSpeed(speedIncrement);
     }
 
     draw() {

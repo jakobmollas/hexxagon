@@ -8,7 +8,7 @@ class Settings {
     this.inzaneMode = false;
     this.obstacleSpacing = 235;
     this.obstacleCount = 3;
-    this.speedIncrement = 4;
+    this.speedIncrement = 4; // higher = faster speed increase = harder
   }
 }
 
@@ -17,9 +17,11 @@ let score = 0;
 let isGameOver = false;
 let leftIsPressed = false;
 let rightIsPressed = false;
-
 let obstacles = [];
 let player = new Player();
+
+let speed = 0;
+let maxSpeed = 200; // The point where it becomes very hard
 
 // Called by P5.js
 function setup() {
@@ -83,12 +85,13 @@ function draw() {
   // Process game logic
   if (!isGameOver && settings.animate) {
     handleKeyboardInput();
+    updateGlobalState();
     updateObstacles();
     updatePlayer();
     checkClearedObstacles();
   }
 
-  background(255, 0, 0);
+  drawBackground();
 
   // Render game objects
   drawObstacles();
@@ -112,13 +115,13 @@ function draw() {
 // Private code
 function initializeGameObjects() {
   score = 0;
+  speed = 0;
   isGameOver = false;
-
-  obstacles = [];
 
   var baseRadius = windowHeight > windowWidth ? windowHeight : windowWidth;
   baseRadius /= 1.1;
 
+  obstacles = [];
   for (let i = 0; i < settings.obstacleCount; i++) {
     obstacles.push(new Obstacle(baseRadius + i * settings.obstacleSpacing, settings.inzaneMode));
   }
@@ -145,6 +148,10 @@ function checkCollisions() {
 
   var colorAtBallPosition = get(player.x, player.y);
   isGameOver = isGameOver || colorAtBallPosition[1] == 255;
+
+  if (isGameOver) {
+    player.initialize();
+  }
 }
 
 function checkClearedObstacles() {
@@ -158,6 +165,10 @@ function checkClearedObstacles() {
       obstacle.setCleared();
     }
   }
+}
+
+function updateGlobalState() {
+  speed += deltaSpeed(settings.speedIncrement);
 }
 
 function updateObstacles() {
@@ -181,7 +192,13 @@ function updatePlayer() {
   rotation = rightIsPressed ? player.direction.RIGHT : rotation;
 
   player.setRotation(rotation);
-  player.update();
+  player.update(settings.speedIncrement);
+}
+
+function drawBackground() {
+  let red = map(speed / maxSpeed, 0, 1, 0, 255, true);
+  let blue = map(speed / maxSpeed, 0, 1, 255, 0, true);
+  background(red, 0, blue);
 }
 
 function drawObstacles() {
