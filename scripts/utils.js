@@ -10,6 +10,10 @@ function deltaSpeed(speed) {
     return deltaTime * (speed / 1000);
 }
 
+function deltaSpeedIncrease(adjustmentFactor = 1) {
+    return deltaSpeed(settings.speedIncrease * adjustmentFactor);
+}
+
 // Create a basic polygon, handles triangles, squares, pentagons, etc
 function createPolygon(x, y, radius, sides = 3, angle = 0) {
     beginShape();

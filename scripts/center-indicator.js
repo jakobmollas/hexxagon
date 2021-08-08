@@ -13,13 +13,14 @@ class CenterIndicator {
         this.initialize();
     }
 
+    // "Public" API methods
     initialize() {
         this.radius = this.minRadius;
         this.pulseSpeed = this.initialPulseSpeed;
     }
 
-    update(speedIncrement) {
-        this.pulseSpeed += deltaSpeed(speedIncrement/25);
+    update() {
+        this.pulseSpeed += deltaSpeedIncrease(0.03);
 
         this.radius = this.radius < this.minRadius 
             ? this.maxRadius 

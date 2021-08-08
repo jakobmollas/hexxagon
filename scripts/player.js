@@ -31,17 +31,17 @@ class Player {
         this.rotationAngle = normalizeAngle(this.rotationAngle);
     }
 
-    // Just to tidy up the "api" a bit
-    setRotation(direction) {
-        this.movement = direction;
-    }
-
+    // "Public" API methods
     initialize() {
         this.rotationSpeed = this.initialRotationSpeed;
     }
 
-    update(speedIncrement) {
-        this.rotationSpeed += deltaSpeed(speedIncrement/60);
+    setMovement(direction) {
+        this.movement = direction;
+    }
+
+    update() {
+        this.rotationSpeed += deltaSpeed(0.02);
 
         this.rotate(this.movement, this.rotationSpeed);
 

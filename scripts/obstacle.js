@@ -33,6 +33,7 @@ class Obstacle {
 
     }
 
+    // "Public" API methods
     setCleared() {
         this.hasBeenCleared = true;
     }
@@ -46,7 +47,7 @@ class Obstacle {
             this.respawn(respawnRadius);
         }
 
-        this.shrinkSpeed += deltaSpeed(speedIncrement);
+        this.shrinkSpeed += deltaSpeedIncrease(1);
     }
 
     draw() {

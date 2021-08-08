@@ -7,7 +7,8 @@ class Settings {
     this.checkCollisions = true;
     this.obstacleSpacing = 235;
     this.obstacleCount = 3;
-    this.speedIncrement = 4; // higher = faster speed increase = harder
+    this.speedIncrease = 4; // "units/second" higher = faster speed increase => harder gameplay
+    this.maxSpeed = 200; // Approximate point where things becomes very hard
   }
 }
 
@@ -22,7 +23,7 @@ let player = new Player();
 let centerIndicator = new CenterIndicator();
 
 let speed = 0;
-let maxSpeed = 200; // The point where it becomes very hard
+
 
 // Called by P5.js
 function setup() {
@@ -156,7 +157,7 @@ function checkClearedObstacles() {
 }
 
 function updateGlobalState() {
-  speed += deltaSpeed(settings.speedIncrement);
+  speed += deltaSpeedIncrease();
 }
 
 function updateObstacles() {
@@ -170,26 +171,27 @@ function updateObstacles() {
   var respawnRadius = largestRadius + settings.obstacleSpacing;
 
   for (let obstacle of obstacles) {
-    obstacle.update(respawnRadius, settings.speedIncrement);
+    obstacle.update(respawnRadius);
   }
 }
 
 function updatePlayer() {
-  var rotation = player.direction.NONE;
-  rotation = leftIsPressed ? player.direction.LEFT : rotation;
-  rotation = rightIsPressed ? player.direction.RIGHT : rotation;
+  var movement = player.direction.NONE;
+  movement = leftIsPressed ? player.direction.LEFT : movement;
+  movement = rightIsPressed ? player.direction.RIGHT : movement;
 
-  player.setRotation(rotation);
-  player.update(settings.speedIncrement);
+  player.setMovement(movement);
+  player.update();
 }
 
 function updateCenterIndicator() {
-  centerIndicator.update(settings.speedIncrement);
+  centerIndicator.update();
 }
 
 function drawBackground() {
-  let red = map(speed / maxSpeed, 0, 1, 0, 255, true);
-  let blue = map(speed / maxSpeed, 0, 1, 255, 0, true);
+  // Fade from blue -> red based on current speed
+  let red = map(speed / settings.maxSpeed, 0, 1, 0, 255, true);
+  let blue = map(speed / settings.maxSpeed, 0, 1, 255, 0, true);
   background(red, 0, blue);
 }
 
