@@ -20,6 +20,7 @@ function drawDiagnostics() {
   text("BallY: " + player.y, left, top + 6 * offset);
   text("CX:    " + centerX(), left, top + 7 * offset);
   text("CY:    " + centerY(), left, top + 8 * offset);
+  text("Speed: " + obstacles[0].shrinkSpeed.toFixed(0), left, top + 9 * offset);
 
   pop();
 }

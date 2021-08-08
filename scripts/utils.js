@@ -5,6 +5,11 @@ function normalizeAngle(angle) {
     return newAngle;
 }
 
+function deltaSpeed(speed) {
+    // deltaTime = ms since last frame
+    return deltaTime * (speed / 1000);
+}
+
 // Create a basic polygon, handles triangles, squares, pentagons, etc
 function createPolygon(x, y, radius, sides = 3, angle = 0) {
     beginShape();
