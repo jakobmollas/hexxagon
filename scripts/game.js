@@ -8,6 +8,7 @@ class Settings {
     this.inzaneMode = false;
     this.obstacleSpacing = 235;
     this.obstacleCount = 3;
+    this.speedIncrement = 4;
   }
 }
 
@@ -16,6 +17,7 @@ let score = 0;
 let isGameOver = false;
 let leftIsPressed = false;
 let rightIsPressed = false;
+
 let obstacles = [];
 let player = new Player();
 
@@ -169,7 +171,7 @@ function updateObstacles() {
   var respawnRadius = largestRadius + settings.obstacleSpacing;
 
   for (let obstacle of obstacles) {
-    obstacle.update(respawnRadius);
+    obstacle.update(respawnRadius, settings.speedIncrement);
   }
 }
 

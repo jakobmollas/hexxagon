@@ -15,10 +15,10 @@ class Player {
         this.y;
 
         // Constants
-        this.rotationSpeed = 160;  // lower = faster
+        this.rotationSpeed = 6.5;
         this.size = 12;
         this.radius = 75;
-        this.driftSpeed = 5000;
+        this.driftSpeed = 0.2;
     }
 
     // Just to tidy up the "api" a bit
@@ -27,12 +27,12 @@ class Player {
     }
 
     rotate(rotationDirection, speed) {
-        if (rotationDirection == this.direction.NONE) 
+        if (rotationDirection == this.direction.NONE)
             return;
 
-        var delta = deltaTime;
+        var delta = deltaSpeed(speed);
         delta = delta * (rotationDirection == this.direction.LEFT ? -1 : 1);
-        this.rotationAngle += delta / speed;
+        this.rotationAngle += delta;
         this.rotationAngle = normalizeAngle(this.rotationAngle);
     }
 
@@ -47,7 +47,7 @@ class Player {
         this.y = centerY() + rotationVector.y;
     }
 
-    
+
     draw() {
         push();
         strokeWeight(1);
