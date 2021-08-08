@@ -1,66 +1,75 @@
 'use strict'
 
-function drawDiagnostics() {
-  push();
+class Ui {
+  constructor() { 
+    this.isGameOver = false;
+    this.showDiagnostics = false;
+  }
 
-  strokeWeight(0);
-  textSize(12);
-  fill(255, 255, 255);
-  stroke(0);
+  draw() {
+    if (this.showDiagnostics) {
+      this.drawDiagnostics();
+    }
 
-  let left = 10;
-  let top = 20;
-  let offset = 12;
+    if (this.isGameOver) {
+      this.drawGameOver();
+    }
+    
+    this.drawScore();
+  }
 
-  text("FPS:   " + frameRate().toFixed(), left, top);
-  text("Score: " + score.toFixed(), left, top + 1 * offset);
-  text("Speed: " + speed.toFixed(1), left, top + 2 * offset);
-  text("GOver: " + isGameOver, left, top + 3 * offset);
-  text("BallA: " + player.rotationAngle.toFixed(2), left, top + 4 * offset);
-  text("BallX: " + player.x, left, top + 5 * offset);
-  text("BallY: " + player.y, left, top + 6 * offset);
-  text("CX:    " + centerX(), left, top + 7 * offset);
-  text("CY:    " + centerY(), left, top + 8 * offset);
+  drawDiagnostics() {
+    push();
 
-  pop();
-}
+    strokeWeight(0);
+    textSize(12);
+    fill(255, 255, 255);
+    stroke(0);
 
-function drawScore() {
-  push();
+    let left = 10;
+    let top = 20;
+    let offset = 12;
 
-  var size = 40;
-  textSize(size);
-  fill(255, 255, 255);
-  stroke(0, 0, 0);
-  strokeWeight(2.5);
-  textAlign(CENTER, TOP);
-  text("Score: " + score, centerX(), size);
+    text("FPS:   " + frameRate().toFixed(), left, top);
+    text("Score: " + score.toFixed(), left, top + 1 * offset);
+    text("Speed: " + speed.toFixed(1), left, top + 2 * offset);
+    text("GOver: " + isGameOver, left, top + 3 * offset);
+    text("BallA: " + player.rotationAngle.toFixed(2), left, top + 4 * offset);
+    text("BallX: " + player.x, left, top + 5 * offset);
+    text("BallY: " + player.y, left, top + 6 * offset);
+    text("CX:    " + centerX(), left, top + 7 * offset);
+    text("CY:    " + centerY(), left, top + 8 * offset);
 
-  pop();
-}
+    pop();
+  }
 
-function drawGameOver() {
-  push();
+  drawScore() {
+    push();
 
-  var size = 20;
-  textSize(size);
-  fill(255, 255, 255);
-  stroke(0, 0, 0);
-  strokeWeight(2.5);
-  textAlign(CENTER, BOTTOM);
-  text("GAME OVER", centerX(), windowHeight - 3*size);
-  text("PRESS SPACE/TOUCH", centerX(), windowHeight - 2*size);
-  text("TO RESTART", centerX(), windowHeight - size);
+    var size = 40;
+    textSize(size);
+    fill(255, 255, 255);
+    stroke(0, 0, 0);
+    strokeWeight(2.5);
+    textAlign(CENTER, TOP);
+    text("Score: " + score, centerX(), size);
 
-  pop();
-}
+    pop();
+  }
 
-function drawCenterIndicator() {
-  push();
+  drawGameOver() {
+    push();
 
-  fill(0, 0, 0, 100);
-  noStroke();
-  circle(centerX(), centerY(), 50);
+    var size = 20;
+    textSize(size);
+    fill(255, 255, 255);
+    stroke(0, 0, 0);
+    strokeWeight(2.5);
+    textAlign(CENTER, BOTTOM);
+    text("GAME OVER", centerX(), windowHeight - 3*size);
+    text("PRESS SPACE/TOUCH", centerX(), windowHeight - 2*size);
+    text("TO RESTART", centerX(), windowHeight - size);
 
-  pop();
+    pop();
+  }
 }

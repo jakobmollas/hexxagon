@@ -5,20 +5,21 @@ class Settings {
     this.animate = true;
     this.showDiagnostics = false;
     this.checkCollisions = true;
-    this.inzaneMode = false;
     this.obstacleSpacing = 235;
     this.obstacleCount = 3;
     this.speedIncrement = 4; // higher = faster speed increase = harder
   }
 }
 
-let settings = new Settings();
 let score = 0;
 let isGameOver = false;
 let leftIsPressed = false;
 let rightIsPressed = false;
+let settings = new Settings();
+let ui = new Ui();
 let obstacles = [];
 let player = new Player();
+let centerIndicator = new CenterIndicator();
 
 let speed = 0;
 let maxSpeed = 200; // The point where it becomes very hard
@@ -51,10 +52,6 @@ function keyTyped() {
       settings.checkCollisions = settings.showDiagnostics ? !settings.checkCollisions : settings.checkCollisions;
       break;
 
-    case "i":
-      settings.inzaneMode = !settings.inzaneMode;
-      break;
-
     case " ":
       handleRestart();
       break;
@@ -80,7 +77,7 @@ function mouseReleased(event) {
   return false;
 }
 
-// Main processing loop
+// Main game loop
 function draw() {
   // Process game logic
   if (!isGameOver && settings.animate) {
@@ -88,28 +85,20 @@ function draw() {
     updateGlobalState();
     updateObstacles();
     updatePlayer();
+    updateCenterIndicator();
     checkClearedObstacles();
   }
 
   drawBackground();
 
-  // Render game objects
+  // Render stuff
   drawObstacles();
   if (!isGameOver && settings.checkCollisions) {
     checkGameOver();  // Yes, this should be handled in game logic but currently relies on drawing order
   }
   drawPlayer();
-
-  // Render UI elements
-  drawScore();
   drawCenterIndicator();
-
-  if (isGameOver) {
-    drawGameOver();
-  }
-
-  if (settings.showDiagnostics)
-    drawDiagnostics();
+  drawUi();
 }
 
 // Private code
@@ -127,6 +116,7 @@ function initializeGameObjects() {
   }
 
   player.initialize();
+  centerIndicator.initialize();
 }
 
 function handleRestart() {
@@ -193,6 +183,10 @@ function updatePlayer() {
   player.update(settings.speedIncrement);
 }
 
+function updateCenterIndicator() {
+  centerIndicator.update(settings.speedIncrement);
+}
+
 function drawBackground() {
   let red = map(speed / maxSpeed, 0, 1, 0, 255, true);
   let blue = map(speed / maxSpeed, 0, 1, 255, 0, true);
@@ -208,3 +202,15 @@ function drawObstacles() {
 function drawPlayer() {
   player.draw();
 }
+
+function drawCenterIndicator() {
+  centerIndicator.draw();
+}
+
+function drawUi() {
+  ui.isGameOver = isGameOver;
+  ui.showDiagnostics = settings.showDiagnostics;
+  
+  ui.draw();
+}
+

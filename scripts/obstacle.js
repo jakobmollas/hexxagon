@@ -1,32 +1,26 @@
 'use strict'
 
 class Obstacle {
-    constructor(initialRadius, inzaneMode) {
-        this.originalRadius = initialRadius;
+    constructor(initialRadius) {
         this.radius = initialRadius;
         this.hasBeenCleared = false;
-        this.inzaneMode = inzaneMode;
         this.shrinkSpeed = 125;     // Initial speed
 
         // Constants
         this.rotationSpeed = 0.3;
         this.minimumSize = 10;
         this.thickness = 13;
-        this.standardSideCount = 6;
+        this.sides = 6;
         this.minRandomSides = 3;
         this.maxRandomSides = 8;
 
-        this.initialize(initialRadius);
+        this.respawn(initialRadius);
     }
 
-    initialize(radius) {
-        this.originalRadius = radius;
+    respawn(radius) {
         this.radius = radius;
         this.hasBeenCleared = false;
-        this.sides = this.inzaneMode
-            ? floor(random(this.minRandomSides, this.maxRandomSides + 1))
-            : this.standardSideCount;
-
+        
         // It is very hard for players when opening is to the right/left (horizontal), 
         // ensure opening is more vertically aligned
         // Also account for rotation.
@@ -34,8 +28,8 @@ class Obstacle {
         // PI (left) -> 0 (right)
         // 0 (right) -> -PI (left)
         this.angle = !random([0, 1]) 
-            ? random(PI, PI * 1/6)
-            : random(0, -PI * 5/6);
+            ? random(PI, PI * 1.5/6)
+            : random(0, -PI * 4.5/6);
 
     }
 
@@ -49,7 +43,7 @@ class Obstacle {
 
         this.radius -= deltaSpeed(this.shrinkSpeed);
         if (this.radius < this.minimumSize) {
-            this.initialize(respawnRadius);
+            this.respawn(respawnRadius);
         }
 
         this.shrinkSpeed += deltaSpeed(speedIncrement);
