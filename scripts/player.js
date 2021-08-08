@@ -41,7 +41,7 @@ class Player {
     }
 
     update() {
-        this.rotationSpeed += deltaSpeed(0.02);
+        this.rotationSpeed += deltaSpeedIncrease(0.02);
 
         this.rotate(this.movement, this.rotationSpeed);
 

@@ -38,7 +38,9 @@ class Obstacle {
         this.hasBeenCleared = true;
     }
 
-    update(respawnRadius, speedIncrement) {
+    update(respawnRadius) {
+        this.shrinkSpeed += deltaSpeedIncrease(4);
+
         this.angle += deltaSpeed(this.rotationSpeed);
         this.angle = normalizeAngle(this.angle);
 
@@ -46,8 +48,6 @@ class Obstacle {
         if (this.radius < this.minimumSize) {
             this.respawn(respawnRadius);
         }
-
-        this.shrinkSpeed += deltaSpeedIncrease(1);
     }
 
     draw() {

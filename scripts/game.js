@@ -7,7 +7,7 @@ class Settings {
     this.checkCollisions = true;
     this.obstacleSpacing = 235;
     this.obstacleCount = 3;
-    this.speedIncrease = 4; // "units/second" higher = faster speed increase => harder gameplay
+    this.speedIncrease = 1; // "units/second" higher = faster speed increase => harder gameplay
     this.maxSpeed = 200; // Approximate point where things becomes very hard
   }
 }
@@ -157,7 +157,7 @@ function checkClearedObstacles() {
 }
 
 function updateGlobalState() {
-  speed += deltaSpeedIncrease();
+  speed += deltaSpeedIncrease(4);
 }
 
 function updateObstacles() {

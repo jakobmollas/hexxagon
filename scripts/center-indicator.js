@@ -20,7 +20,7 @@ class CenterIndicator {
     }
 
     update() {
-        this.pulseSpeed += deltaSpeedIncrease(0.03);
+        this.pulseSpeed += deltaSpeedIncrease(0.12);
 
         this.radius = this.radius < this.minRadius 
             ? this.maxRadius 
