@@ -5,7 +5,7 @@ class CenterIndicator {
         this.radius = 5;
 
         // Constants
-        this.pulseSpeed = 0.1;
+        this.pulseSpeed = 60;
         this.minRadius = this.radius;
         this.maxRadius = 60;
 
@@ -18,9 +18,10 @@ class CenterIndicator {
     }
 
     update(deltaTime) {
+        // Note: We want to speed up animation quite a bit, so we adjust delta
         this.radius = this.radius < this.minRadius 
             ? this.maxRadius 
-            : this.radius - deltaSpeed(deltaTime, this.pulseSpeed);
+            : this.radius - pow(deltaSpeed(deltaTime, this.pulseSpeed), 3);
     }
 
     draw() {
