@@ -1,23 +1,25 @@
 'use strict'
 
 class Obstacle {
-    constructor(initialRadius) {
+    constructor(initialRadius, obstacles, obstacleSpacing) {
         this.radius = initialRadius;
         this.hasBeenCleared = false;
-        this.shrinkSpeed = 125;     // Initial speed
 
         // Constants
+        this.obstacles = obstacles;
+        this.obstacleSpacing = obstacleSpacing;
         this.rotationSpeed = 0.3;
+        this.shrinkSpeed = 125;
         this.minimumSize = 10;
         this.thickness = 13;
         this.sides = 6;
         this.minRandomSides = 3;
         this.maxRandomSides = 8;
 
-        this.respawn(initialRadius);
+        this.initialize(initialRadius);
     }
 
-    respawn(radius) {
+    initialize(radius) {
         this.radius = radius;
         this.hasBeenCleared = false;
         
@@ -30,7 +32,18 @@ class Obstacle {
         this.angle = !random([0, 1]) 
             ? random(PI, PI * 1.5/6)
             : random(0, -PI * 4.5/6);
+    }
 
+    calculateRespawnRadius() {
+        let largestRadius = 0;
+        for (let obstacle of obstacles) {
+            largestRadius = largestRadius < obstacle.radius 
+            ? obstacle.radius 
+            : largestRadius;
+        }
+
+        var respawnRadius = largestRadius + this.obstacleSpacing;
+        return respawnRadius;
     }
 
     // "Public" API methods
@@ -38,13 +51,13 @@ class Obstacle {
         this.hasBeenCleared = true;
     }
 
-    update(deltaTime, respawnRadius) {
+    update(deltaTime) {
         this.angle += deltaSpeed(deltaTime, this.rotationSpeed);
         this.angle = normalizeAngle(this.angle);
 
-        this.radius -= deltaSpeed(deltaTime,this.shrinkSpeed);
+        this.radius -= deltaSpeed(deltaTime, this.shrinkSpeed);
         if (this.radius < this.minimumSize) {
-            this.respawn(respawnRadius);
+            this.initialize(this.calculateRespawnRadius());
         }
     }
 

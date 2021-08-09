@@ -112,7 +112,7 @@ function initializeGameObjects() {
 
   obstacles = [];
   for (let i = 0; i < settings.obstacleCount; i++) {
-    obstacles.push(new Obstacle(baseRadius + i * settings.obstacleSpacing, settings.inzaneMode));
+    obstacles.push(new Obstacle(baseRadius + i * settings.obstacleSpacing, obstacles, settings.obstacleSpacing));
   }
 
   player.initialize();
@@ -162,17 +162,8 @@ function checkClearedObstacles() {
 }
 
 function updateObstacles(deltaTime) {
-  let largestRadius = 0;
   for (let obstacle of obstacles) {
-    largestRadius = largestRadius < obstacle.radius 
-      ? obstacle.radius 
-      : largestRadius;
-  }
-
-  var respawnRadius = largestRadius + settings.obstacleSpacing;
-
-  for (let obstacle of obstacles) {
-    obstacle.update(deltaTime, respawnRadius);
+    obstacle.update(deltaTime);
   }
 }
 
