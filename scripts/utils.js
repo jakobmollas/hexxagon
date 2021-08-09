@@ -5,13 +5,8 @@ function normalizeAngle(angle) {
     return newAngle;
 }
 
-function deltaSpeed(speed) {
-    // deltaTime = ms since last frame
-    return deltaTime * (speed / 1000);
-}
-
-function deltaSpeedIncrease(adjustmentFactor = 1) {
-    return deltaSpeed(settings.speedIncrease * adjustmentFactor);
+function deltaSpeed(deltaTimeInMs, speed) {
+    return deltaTimeInMs * (speed / 1000);
 }
 
 // Create a basic polygon, handles triangles, squares, pentagons, etc

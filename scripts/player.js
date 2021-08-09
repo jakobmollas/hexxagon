@@ -8,14 +8,13 @@ class Player {
             RIGHT: "right"
         }
 
-        this.rotationSpeed = 6;
         this.rotationAngle = 0;
         this.movement = this.direction.NONE;
         this.x;
         this.y;
 
         // Constants
-        this.initialRotationSpeed = 6;
+        this.rotationSpeed = 6;
         this.driftSpeed = 0.2;
         this.size = 12;
         this.radius = 75;
@@ -23,30 +22,29 @@ class Player {
         this.initialize();
     }
 
-    rotate(movement, speed) {
+    rotate(movement, amount) {
         if (movement == this.direction.NONE)
             return;
 
-        this.rotationAngle += deltaSpeed(speed) * (movement == this.direction.LEFT ? -1 : 1);
+        this.rotationAngle += amount * (movement == this.direction.LEFT ? -1 : 1);
         this.rotationAngle = normalizeAngle(this.rotationAngle);
     }
 
     // "Public" API methods
     initialize() {
-        this.rotationSpeed = this.initialRotationSpeed;
     }
 
     setMovement(direction) {
         this.movement = direction;
     }
 
-    update() {
-        this.rotationSpeed += deltaSpeedIncrease(0.02);
-
-        this.rotate(this.movement, this.rotationSpeed);
+    update(deltaTime) {
+        let rotationAmount = deltaSpeed(deltaTime, this.rotationSpeed);
+        this.rotate(this.movement, rotationAmount);
 
         // Add base drift
-        this.rotate(this.direction.RIGHT, this.driftSpeed);
+        var driftAmount = deltaSpeed(deltaTime, this.driftSpeed);
+        this.rotate(this.direction.RIGHT, driftAmount);
 
         var rotationVector = p5.Vector.fromAngle(player.rotationAngle, player.radius);
         this.x = centerX() + rotationVector.x;

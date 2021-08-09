@@ -3,10 +3,9 @@
 class CenterIndicator {
     constructor() {
         this.radius = 5;
-        this.pulseSpeed = 0.1;
 
         // Constants
-        this.initialPulseSpeed = this.pulseSpeed;
+        this.pulseSpeed = 0.1;
         this.minRadius = this.radius;
         this.maxRadius = 60;
 
@@ -16,15 +15,12 @@ class CenterIndicator {
     // "Public" API methods
     initialize() {
         this.radius = this.minRadius;
-        this.pulseSpeed = this.initialPulseSpeed;
     }
 
-    update() {
-        this.pulseSpeed += deltaSpeedIncrease(0.12);
-
+    update(deltaTime) {
         this.radius = this.radius < this.minRadius 
             ? this.maxRadius 
-            : this.radius - this.pulseSpeed;
+            : this.radius - deltaSpeed(deltaTime, this.pulseSpeed);
     }
 
     draw() {

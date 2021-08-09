@@ -30,15 +30,14 @@ class Ui {
     let top = 20;
     let offset = 12;
 
-    text("FPS:   " + frameRate().toFixed(), left, top);
-    text("Score: " + score.toFixed(), left, top + 1 * offset);
-    text("Speed: " + speed.toFixed(1), left, top + 2 * offset);
-    text("GOver: " + isGameOver, left, top + 3 * offset);
-    text("BallA: " + player.rotationAngle.toFixed(2), left, top + 4 * offset);
-    text("BallX: " + player.x, left, top + 5 * offset);
-    text("BallY: " + player.y, left, top + 6 * offset);
-    text("BallS: " + player.rotationSpeed.toFixed(2), left, top + 7 * offset);
-    text("CY:    " + centerY(), left, top + 8 * offset);
+    text("FPS:    " + frameRate().toFixed(), left, top);
+    text("Score:  " + score.toFixed(), left, top + 1 * offset);
+    text("SpeedF: " + speedFactor.toFixed(1), left, top + 2 * offset);
+    text("GOver:  " + isGameOver, left, top + 3 * offset);
+    text("BallA:  " + player.rotationAngle.toFixed(2), left, top + 4 * offset);
+    text("BallX:  " + player.x, left, top + 5 * offset);
+    text("BallY:  " + player.y, left, top + 6 * offset);
+    text("BallSp: " + player.rotationSpeed.toFixed(2), left, top + 7 * offset);
 
     pop();
   }

@@ -38,13 +38,11 @@ class Obstacle {
         this.hasBeenCleared = true;
     }
 
-    update(respawnRadius) {
-        this.shrinkSpeed += deltaSpeedIncrease(4);
-
-        this.angle += deltaSpeed(this.rotationSpeed);
+    update(deltaTime, respawnRadius) {
+        this.angle += deltaSpeed(deltaTime, this.rotationSpeed);
         this.angle = normalizeAngle(this.angle);
 
-        this.radius -= deltaSpeed(this.shrinkSpeed);
+        this.radius -= deltaSpeed(deltaTime,this.shrinkSpeed);
         if (this.radius < this.minimumSize) {
             this.respawn(respawnRadius);
         }

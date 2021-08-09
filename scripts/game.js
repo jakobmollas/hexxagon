@@ -7,12 +7,13 @@ class Settings {
     this.checkCollisions = true;
     this.obstacleSpacing = 235;
     this.obstacleCount = 3;
-    this.speedIncrease = 1; // "units/second" higher = faster speed increase => harder gameplay
-    this.maxSpeed = 200; // Approximate point where things becomes very hard
+    this.speedIncreasePerSecond = 0.02; // faster speed increase => harder gameplay
+    this.maxSpeedFactor = 2; // Approximate point where things becomes very hard
   }
 }
 
 let score = 0;
+let speedFactor = 1;
 let isGameOver = false;
 let leftIsPressed = false;
 let rightIsPressed = false;
@@ -21,9 +22,6 @@ let ui = new Ui();
 let obstacles = [];
 let player = new Player();
 let centerIndicator = new CenterIndicator();
-
-let speed = 0;
-
 
 // Called by P5.js
 function setup() {
@@ -83,10 +81,11 @@ function draw() {
   // Process game logic
   if (!isGameOver && settings.animate) {
     handleKeyboardInput();
-    updateGlobalState();
-    updateObstacles();
-    updatePlayer();
-    updateCenterIndicator();
+
+    let dt = calculateDeltaTime();
+    updateObstacles(dt);
+    updatePlayer(dt);
+    updateCenterIndicator(dt);
     checkClearedObstacles();
   }
 
@@ -105,10 +104,10 @@ function draw() {
 // Private code
 function initializeGameObjects() {
   score = 0;
-  speed = 0;
+  speedFactor = 1;
   isGameOver = false;
 
-  var baseRadius = windowHeight > windowWidth ? windowHeight : windowWidth;
+  let baseRadius = windowHeight > windowWidth ? windowHeight : windowWidth;
   baseRadius /= 1.1;
 
   obstacles = [];
@@ -136,10 +135,16 @@ function handleKeyboardInput() {
   rightIsPressed = keyIsDown(RIGHT_ARROW);
 }
 
+function calculateDeltaTime() {
+  // Adjust actual delta time to simulate global game speedup
+  speedFactor += settings.speedIncreasePerSecond * deltaTime / 1000; 
+  return deltaTime * speedFactor;
+}
+
 function checkGameOver() {
   // Todo: Improve collision detection, use geometry instead, this is VERY brittle...
 
-  var colorAtBallPosition = get(player.x, player.y);
+  let colorAtBallPosition = get(player.x, player.y);
   isGameOver = isGameOver || colorAtBallPosition[1] == 255;
 }
 
@@ -156,12 +161,8 @@ function checkClearedObstacles() {
   }
 }
 
-function updateGlobalState() {
-  speed += deltaSpeedIncrease(4);
-}
-
-function updateObstacles() {
-  var largestRadius = 0;
+function updateObstacles(deltaTime) {
+  let largestRadius = 0;
   for (let obstacle of obstacles) {
     largestRadius = largestRadius < obstacle.radius 
       ? obstacle.radius 
@@ -171,27 +172,27 @@ function updateObstacles() {
   var respawnRadius = largestRadius + settings.obstacleSpacing;
 
   for (let obstacle of obstacles) {
-    obstacle.update(respawnRadius);
+    obstacle.update(deltaTime, respawnRadius);
   }
 }
 
-function updatePlayer() {
-  var movement = player.direction.NONE;
+function updatePlayer(deltaTime) {
+  let movement = player.direction.NONE;
   movement = leftIsPressed ? player.direction.LEFT : movement;
   movement = rightIsPressed ? player.direction.RIGHT : movement;
 
   player.setMovement(movement);
-  player.update();
+  player.update(deltaTime);
 }
 
-function updateCenterIndicator() {
-  centerIndicator.update();
+function updateCenterIndicator(deltaTime) {
+  centerIndicator.update(deltaTime);
 }
 
 function drawBackground() {
-  // Fade from blue -> red based on current speed
-  let red = map(speed / settings.maxSpeed, 0, 1, 0, 255, true);
-  let blue = map(speed / settings.maxSpeed, 0, 1, 255, 0, true);
+  // Fade from blue -> red based on current speed factor
+  let red = map(speedFactor / settings.maxSpeedFactor, 0.5, 1, 0, 255, true);
+  let blue = map(speedFactor / settings.maxSpeedFactor, 0.5, 1, 255, 0, true);
   background(red, 0, blue);
 }
 
