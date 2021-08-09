@@ -6,5 +6,4 @@ Live example at: https://jakobmollas.github.io/hexxagon/
 
 Controls: 
 * `LEFT/RIGHT` arrows or touch left/right side - rotate ball
-* `i` - toggle random shape mode
 * `d` - toggle diagnostics
