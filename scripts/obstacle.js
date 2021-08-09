@@ -16,10 +16,10 @@ class Obstacle {
         this.minRandomSides = 3;
         this.maxRandomSides = 8;
 
-        this.initialize(initialRadius);
+        this.respawn(initialRadius);
     }
 
-    initialize(radius) {
+    respawn(radius) {
         this.radius = radius;
         this.hasBeenCleared = false;
         
@@ -42,7 +42,7 @@ class Obstacle {
             : largestRadius;
         }
 
-        var respawnRadius = largestRadius + this.obstacleSpacing;
+        let respawnRadius = largestRadius + this.obstacleSpacing;
         return respawnRadius;
     }
 
@@ -57,7 +57,7 @@ class Obstacle {
 
         this.radius -= deltaSpeed(deltaTime, this.shrinkSpeed);
         if (this.radius < this.minimumSize) {
-            this.initialize(this.calculateRespawnRadius());
+            this.respawn(this.calculateRespawnRadius());
         }
     }
 

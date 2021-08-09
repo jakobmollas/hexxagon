@@ -45,7 +45,7 @@ class Ui {
   drawScore() {
     push();
 
-    var size = 40;
+    let size = 40;
     textSize(size);
     fill(255, 255, 255);
     stroke(0, 0, 0);
@@ -59,7 +59,7 @@ class Ui {
   drawGameOver() {
     push();
 
-    var size = 20;
+    let size = 20;
     textSize(size);
     fill(255, 255, 255);
     stroke(0, 0, 0);

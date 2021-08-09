@@ -43,10 +43,10 @@ class Player {
         this.rotate(this.movement, rotationAmount);
 
         // Add base drift
-        var driftAmount = deltaSpeed(deltaTime, this.driftSpeed);
+        let driftAmount = deltaSpeed(deltaTime, this.driftSpeed);
         this.rotate(this.direction.RIGHT, driftAmount);
 
-        var rotationVector = p5.Vector.fromAngle(player.rotationAngle, player.radius);
+        let rotationVector = p5.Vector.fromAngle(player.rotationAngle, player.radius);
         this.x = centerX() + rotationVector.x;
         this.y = centerY() + rotationVector.y;
     }
